@@ -206,3 +206,11 @@ model_summary['Coefficients'] = model.coef_
 model_summary['p-values'] = p_values.round(3)
 model_summary
 
+
+`Train test split`
+
+from sklearn.model_selection import train_test_split
+
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state = 42)
+
+If we don't want our data to be shuffled (which is by default) we can add: shuffle=False
