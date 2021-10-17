@@ -1,4 +1,4 @@
-# Logistic regression
+# Logistic regression with statsmodels
 
 `a) importing libraries`
 import pandas as pd
@@ -101,3 +101,43 @@ def confusion_matrix(data, actual_values, model):
     cm = np.histogram2d(actual_values, pred_values, bins=bins)[0]
     accuracy = (cm[0,0] + cm[1,1])/cm.sum()
     return cm, accuracy
+
+
+# Logistic regression with sklearn
+
+`a) importing libraries`
+import pandas as pd
+import numpy as np
+
+
+
+`b) Data preparation`
+
+`Reading data`
+raw_data = pd.read_csv('data/data_file.csv')
+
+`Descriptive statistics`
+raw_data.describe(include='all')
+
+`Basic info`
+raw_data.info()
+
+`Making a copy of original data before proceeding`
+df = raw_data.copy()
+
+`Showing all rows and column in notebook`
+pd.options.display.max_columns = None
+pd.options.display.max_rows = None
+
+`Pandas dummies`
+columns_dummies = pd.get_dummies(df['column_name'], drop_first = True)
+
+To avoid multicolinearity we have to drop one of the columns (in this case column 0). 
+Leaving all the columns except this one makes no harm to the model 
+because this column is fully explainable using all of the columns left. 
+
+`Grouping columns using .loc`
+group_1 = columns_dummies.loc[:,'a':'c'].max(axis=1) # all rows, columns from 'a' to 'c'
+group_2 = columns_dummies.loc[:,'d':'f'].max(axis=1)
+group_3 = columns_dummies.loc[:,'g':'j'].max(axis=1)
+group_4 = columns_dummies.loc[:,'k':].max(axis=1) # all rows, columns from 'k' to the end
