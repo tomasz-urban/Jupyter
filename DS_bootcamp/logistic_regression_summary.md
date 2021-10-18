@@ -141,3 +141,19 @@ group_1 = columns_dummies.loc[:,'a':'c'].max(axis=1) # all rows, columns from 'a
 group_2 = columns_dummies.loc[:,'d':'f'].max(axis=1)
 group_3 = columns_dummies.loc[:,'g':'j'].max(axis=1)
 group_4 = columns_dummies.loc[:,'k':].max(axis=1) # all rows, columns from 'k' to the end
+
+`Dropping columns`
+#We can drop columns for example after changing them to dummies (we drop original column)
+df = df.drop('column_name', axis=1)
+
+`Concatenating data`
+#When for example groupin columns we are creating new df's. We can concatenate all of that information using pandas method
+df = pd.concat([df, group_1, group_2, group_3, group_4], axis = 1)
+
+`Renaming columns`
+#We can also rename those column as we want. We can list all columns first to save some time 
+df.columns.values
+#Than we have to make a new list with column names (using list we just printed out)
+column_names = []   #copy list from above and change those column which You want
+df.columns = column_names
+
