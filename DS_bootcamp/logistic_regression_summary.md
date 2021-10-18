@@ -157,3 +157,30 @@ df.columns.values
 column_names = []   #copy list from above and change those column which You want
 df.columns = column_names
 
+`Reordering columns`
+columns_reordered = []   #get columns names from df.columns.values and put them in the order You want
+df = df[columns_reordered]
+
+`Object to datetime`
+#We can change date (if stored as an object type) to datetime using pandas
+df['Date'] = pd.to_datetime(df['Date'], format = '%d/%m/%Y')
+
+`Extracting month/day/year from date`
+#We can extract month/day/year from datetime object using for loop (here we have month as an example)
+months_list = []
+for i in range(df.shape[0]):
+    months_list.append(df['Date'][i].month)
+
+#Then we create new column for months
+df['Month'] = months_list
+
+#The same we can do for day (day of the week not the number stored in the datetime object):
+df['Day of the week'] = df['Date'].dt.weekday
+
+`Using .map to change column values (it can be string or number but in DS we need numbers)`
+#In this particular case we are also grouping values by assigning the same values to different numbers
+df['column_name'] = df['column_name'].map({1:0, 2:1, 3:1, 4:1})
+
+`Saving to .csv`
+#After doing all the preparation we can save our dataframe to .csv
+df_preprocessed.to_csv('data/df_preprocessed.csv', index = False)
