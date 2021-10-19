@@ -113,59 +113,59 @@ import numpy as np
 
 `b) Data preparation`
 
-`Reading data`
+`c) Reading data`
 raw_data = pd.read_csv('data/data_file.csv')
 
-`Descriptive statistics`
+`d) Descriptive statistics`
 raw_data.describe(include='all')
 
-`Basic info`
+`e) Basic info`
 raw_data.info()
 
-`Making a copy of original data before proceeding`
+`f) Making a copy of original data before proceeding`
 df = raw_data.copy()
 
-`Showing all rows and column in notebook`
+`g) Showing all rows and column in notebook`
 pd.options.display.max_columns = None
 pd.options.display.max_rows = None
 
-`Pandas dummies`
+`h) Pandas dummies`
 columns_dummies = pd.get_dummies(df['column_name'], drop_first = True)
 
 To avoid multicolinearity we have to drop one of the columns (in this case column 0). 
 Leaving all the columns except this one makes no harm to the model 
 because this column is fully explainable using all of the columns left. 
 
-`Grouping columns using .loc`
+`i) Grouping columns using .loc`
 group_1 = columns_dummies.loc[:,'a':'c'].max(axis=1) # all rows, columns from 'a' to 'c'
 group_2 = columns_dummies.loc[:,'d':'f'].max(axis=1)
 group_3 = columns_dummies.loc[:,'g':'j'].max(axis=1)
 group_4 = columns_dummies.loc[:,'k':].max(axis=1) # all rows, columns from 'k' to the end
 
-`Dropping columns`
+`j) Dropping columns`
 #We can drop columns for example after changing them to dummies (we drop original column)
 df = df.drop('column_name', axis=1)
 
-`Concatenating data`
+`k) Concatenating data`
 #When for example groupin columns we are creating new df's. We can concatenate all of that information using pandas method
 df = pd.concat([df, group_1, group_2, group_3, group_4], axis = 1)
 
-`Renaming columns`
+`l) Renaming columns`
 #We can also rename those column as we want. We can list all columns first to save some time 
 df.columns.values
 #Than we have to make a new list with column names (using list we just printed out)
 column_names = []   #copy list from above and change those column which You want
 df.columns = column_names
 
-`Reordering columns`
+`m) Reordering columns`
 columns_reordered = []   #get columns names from df.columns.values and put them in the order You want
 df = df[columns_reordered]
 
-`Object to datetime`
+`n) Object to datetime`
 #We can change date (if stored as an object type) to datetime using pandas
 df['Date'] = pd.to_datetime(df['Date'], format = '%d/%m/%Y')
 
-`Extracting month/day/year from date`
+`o) Extracting month/day/year from date`
 #We can extract month/day/year from datetime object using for loop (here we have month as an example)
 months_list = []
 for i in range(df.shape[0]):
@@ -177,10 +177,24 @@ df['Month'] = months_list
 #The same we can do for day (day of the week not the number stored in the datetime object):
 df['Day of the week'] = df['Date'].dt.weekday
 
-`Using .map to change column values (it can be string or number but in DS we need numbers)`
+`p) Using .map to change column values (it can be string or number but in DS we need numbers)`
 #In this particular case we are also grouping values by assigning the same values to different numbers
 df['column_name'] = df['column_name'].map({1:0, 2:1, 3:1, 4:1})
 
-`Saving to .csv`
+`r) Saving to .csv`
 #After doing all the preparation we can save our dataframe to .csv
 df_preprocessed.to_csv('data/df_preprocessed.csv', index = False)
+
+`s) Preparing data for Machine Learning`
+#First we have to prepare targets and inputs for machine learning
+#Sometimes targets are already in the data (in this case we just have to choose the appriopriate column)
+#If not we can we can for example divide column into groups using .median() for binary classification
+
+data_preprocessed = pd.read_csv('data/df_preprocessed.csv')
+targets = np.where(df_preprocessed['column_name'] > 
+                   dfpreprocessed['column_name'].median(), 1, 0)
+df_preprocessed['Targets'] = targets
+data_targets = df_preprocessed.drop('column_name', axis = 1)
+
+#Getting inputs (in here we choose all the rest of columns)
+unscaled_inputs = data_targets.iloc[:,:-1] 
