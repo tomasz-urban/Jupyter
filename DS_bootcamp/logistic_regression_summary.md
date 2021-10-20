@@ -197,4 +197,28 @@ df_preprocessed['Targets'] = targets
 data_targets = df_preprocessed.drop('column_name', axis = 1)
 
 #Getting inputs (in here we choose all the rest of columns)
-unscaled_inputs = data_targets.iloc[:,:-1] 
+unscaled_inputs = data_targets.iloc[:,:-1]
+
+
+`Splitting data`
+from sklearn.model_selection import train_test_split
+
+x_train, x_test, y_train, y_test = train_test_split(scaled_inputs, targets, test_size = 0.2, random_state = 20)
+
+`Modeling'
+from sklearn.linear_model import LogisticRegression
+from sklearn import metrics
+
+model = LogisticRegression()
+
+model.fit(x_train, y_train)
+
+model.get_params()
+
+model.score(x_train, y_train)
+
+#Intercept = bias
+model.intercept_
+
+#Coefficients = weights - the closer they are to 0 the smaller the weight (for the models with the same scale like this one)
+model.coef_
