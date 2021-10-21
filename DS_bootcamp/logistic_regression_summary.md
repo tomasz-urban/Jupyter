@@ -205,7 +205,7 @@ from sklearn.model_selection import train_test_split
 
 x_train, x_test, y_train, y_test = train_test_split(scaled_inputs, targets, test_size = 0.2, random_state = 20)
 
-`Modeling'
+`Modeling`
 from sklearn.linear_model import LogisticRegression
 from sklearn import metrics
 
@@ -222,3 +222,55 @@ model.intercept_
 
 #Coefficients = weights - the closer they are to 0 the smaller the weight (for the models with the same scale like this one)
 model.coef_
+
+
+#SUMMARY TABLE
+feature_name = unscaled_inputs.columns.values 
+
+summary_table = pd.DataFrame(columns = ['Feature name'], data=feature_name )
+summary_table['Coefficient'] = np.transpose(model.coef_) # we have to transpose becaues in default nd arrays are rows
+
+#We want to add Intercept value at the beginning of the table as one of the features. 
+#'Making place' for the intercept - when adding +1 to indexes we have index 0 not used
+summary_table.index = summary_table.index + 1 
+#Adding intercept at the index 0 position
+summary_table.loc[0] = ['Intercept', model.intercept_[0]]
+#Sorting by index (because even though we added intercept with index 0 it is placed at the end)
+summary_table = summary_table.sort_index()
+
+#Logistic regression equation in our case is:
+#log(odds) = intercept + b1x1 + b2x2 + ... + b14x14
+#so using values from the table:
+#log(odds) = -0.22 + 2.07* group_1 + 0.33* group_2 + ... + (-0.33)* Pets
+#Log(odds) is the logarithm of odds. Odds is the probability of success (0 - not secceeded, 1- succeeded)
+
+summary_table['Odds_ratio'] = np.exp(summary_table['Coefficient'])
+summary_table.sort_values('Odds_ratio', ascending = False)
+
+
+	Feature name	     Coefficient	Odds_ratio
+3	Rfa_group_3 	        3.095616	22.100858
+1	Rfa_group_1	            2.800965	16.460523
+2	Rfa_group_2	            0.934858	2.546851
+4	Rfa_group_4	            0.856587	2.355110
+7	Transportation Expense	0.612733	1.845467
+13	Children	            0.361990	1.436184
+11	Body Mass Index	        0.271811	1.312340
+5	Month	                0.166248	1.180866
+10	Daily Work Load Average	-0.000147	0.999853
+8	Distance to Work	    -0.007797	0.992233
+6	Day of the week	        -0.084370	0.919091
+9	Age	                    -0.165923	0.847112
+12	Education	            -0.205738	0.814046
+14	Pets	                -0.285511	0.751630
+0	Intercept	            -1.656109	0.190880
+
+#If the coefficient is close to 0 or the odds ratio is around 1, the feature is not really important
+#Considering what's above we can say that those features are not really important:
+#-Daily Work Load Average
+#-Distance to Work
+#-Day of the week
+#The features that are important those from the top and the bottom. The higher the value the bigger importance.
+#The Reason for Absence interpretation Our baseline model is the absence where no reason is given (group 0 which was dropped). Every interpretation of RFA features is a #comparison to the group 0. For example for Rfa_group_1 the probability of excessive absence is 16 times higher than for the absence without giving a reason.
+#Transportation Expense We cannot interpret it directly because this is one of the standardized features. Only thing we can say is that for one standard deviation #increase in transportation expenses (one standardized unit) it is almost 2 times more likely for the person to be excessively absent.
+#Pets Just like with the Transportation Expense this is a standardized feature. We can say that for 0.75 increase in the number of pets it is less likely for the person #to be excessively absent.
