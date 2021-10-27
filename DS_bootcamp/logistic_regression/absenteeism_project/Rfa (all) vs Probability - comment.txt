@@ -1,0 +1,9 @@
+Looking at the graph we can say that:
+
+1. Reason for absence group 2 (Rfa_group_2) can be dropped because all the values for this variable are zeros. That means that we have no observations (meaning no employees) being excesively absent, so there was no employees giving this reason as the Reason for Absence, being excesively absent.
+
+2. Reason for absence group 1 (Rfa_group_1) -  If a person is absent with the reason from that group, as it is marked with values 1, the probability of that person being excesively absent is above 50%. 
+
+3. Reason for absence group 3 (Rfa_group_3) - We can only say that very few observations are marked as 1, also those observations are placed either below or under 50%. We cannot say much about excessive absence in this case.
+
+4. Reason for absence group 4 (Rfa_group_4) - This group is opposite to group 1. If a person is absent with the reason from that group, as it is marked with values 1, the probability of that person being excesively absent is below 50%. 
